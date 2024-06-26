@@ -72,7 +72,7 @@ jobs:
   changelog:
     uses: "./.github/workflows/changelog.yml"
   release:
-    if: needs.changelog.outputs.release-type != 'no-release'
+    if: github.event.pull_request.merged == true && needs.changelog.outputs.release-type != 'no-release'
     needs: [ changelog ]
     runs-on: ubuntu-latest
     steps:
@@ -101,7 +101,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
   clean-changelog:
-    if: needs.changelog.outputs.release-type == 'no-release'
+    if: github.event.pull_request.merged == true && needs.changelog.outputs.release-type == 'no-release'
     needs: [ changelog ]
     runs-on: ubuntu-latest
     steps:
